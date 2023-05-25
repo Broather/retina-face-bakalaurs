@@ -49,14 +49,10 @@ def plot_faces(img_path: str):
         i = i + 1
 
 
-# TODO: get bildes from "praktiskais\bildes"
-# picture_paths = 
-# for path in picture_paths:
-#     plot_faces(path)
 if __name__ == "__main__":
-    img1_path = r"praktiskais\bildes\Sylvester_Stallone_2015.jpg"
-    # img2_path = r"bildes\7588423560_bf88d0bc79_k.jpg"
-    img2_path = r"praktiskais\bildes\Dwayne_The_Rock_Johnson_2009_portrait.jpg"
+    sylvester_img_path = r"praktiskais\bildes\Sylvester_Stallone_2015.jpg"
+    dwayne_img_path = r"praktiskais\bildes\Dwayne_The_Rock_Johnson_2009_portrait.jpg"
+    sylvester2_img_path = r"praktiskais\bildes\7588423560_bf88d0bc79_k.jpg"
 
     # img1 = cv2.imread(img1_path)
     # img2 = cv2.imread(img2_path)
@@ -65,8 +61,12 @@ if __name__ == "__main__":
     # plt.imshow(img2)
     # plt.show()
     
-    obj = DeepFace.verify(img1_path, img2_path, model_name = 'ArcFace', detector_backend = 'retinaface')
-    print(obj)
+    # returns true with a Euclid distance of < threshold (.68)
+    same_person = DeepFace.verify(sylvester_img_path, sylvester2_img_path, model_name = 'ArcFace', detector_backend = 'retinaface')
+    print(f"same_person: {same_person}")
+    # returns false with a Euclid distance of > threshold (.68)
+    different_people = DeepFace.verify(sylvester_img_path, dwayne_img_path, model_name = 'ArcFace', detector_backend = 'retinaface')
+    print(f"different_people: {different_people}")
     # plot_faces("praktiskais\\bildes\\Abstract_Wikipedia_Team_-_Group_photo,_2022-05-12.jpg")
     # plot_faces("praktiskais\\bildes\\Group_Photo_NWPApril2021.jpg")
     # plot_faces("praktiskais\\bildes\\Group_photo_of_Wikimania_Bangladesh_2022_(3).jpg")
