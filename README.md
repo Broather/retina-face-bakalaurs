@@ -4,9 +4,13 @@ Wikimedia Commons is a media file repository making available public domain and 
 
 ### Quickstart:
 ```
-Optional:
-    python -m venv venv
-    ./venv/Scripts/Activate
+Venv setup [optional]:
+    On Windows:
+        python -m venv venv
+        ./venv/Scripts/acti{press Tab for autocomplete}
+    On a penguin:
+        python3 -m venv venv
+        ./venv/bin/acti{press Tab for autocomplete}
 pip install deepface
 pip install matplotlib
 ```
