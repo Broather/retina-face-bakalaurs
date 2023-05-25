@@ -1,7 +1,8 @@
 from retinaface import RetinaFace
-import cv2
+from deepface import DeepFace
+
 import matplotlib.pyplot as plt
-import math
+import cv2
 
 def normalise_landmarks(facial_area: dict, landmarks: dict):
     # facial_area -> [top_left_x, top_left_y, bottom_right_x, bottom_right_y]
@@ -17,23 +18,6 @@ def normalise_landmarks(facial_area: dict, landmarks: dict):
 def plot_landmarks(axs, landmarks: dict):
     for key in landmarks:
         axs.plot(landmarks[key][0], landmarks[key][1], 'ro')
-
-def calculate_proportions(landmarks: dict):
-    right_eye_x = landmarks['right_eye'][0]
-    right_eye_y = landmarks['right_eye'][1]
-    left_eye_x = landmarks['left_eye'][0]
-    left_eye_y = landmarks['left_eye'][1]
-    mouth_right_x = landmarks['mouth_right'][0]
-    mouth_right_y = landmarks['mouth_right'][1]
-    mouth_left_x = landmarks['mouth_left'][0]
-    mouth_left_y = landmarks['mouth_left'][1]
-    # distance between right_eye and left_eye
-    # divided by
-    # distance between mouth_righ and mouth_left
-    distance_between_eyes = math.sqrt((right_eye_x-left_eye_x)**2+(right_eye_y-left_eye_y)**2)
-    mouth_size = math.sqrt((mouth_right_x-mouth_left_x)**2+(mouth_right_y-mouth_left_y)**2)
-
-    return distance_between_eyes/mouth_size
 
 def crop_image(img_path:str, facial_area:list):
     # facial_area -> [top_left_x, top_left_y, bottom_right_x, bottom_right_y]
@@ -64,12 +48,27 @@ def plot_faces(img_path: str):
         # axs[i].set_title(calculate_proportions(normalised_landmarks))
         i = i + 1
 
+
 # TODO: get bildes from "praktiskais\bildes"
 # picture_paths = 
 # for path in picture_paths:
 #     plot_faces(path)
-plot_faces("praktiskais\\bildes\\Abstract_Wikipedia_Team_-_Group_photo,_2022-05-12.jpg")
-plot_faces("praktiskais\\bildes\\Group_Photo_NWPApril2021.jpg")
-plot_faces("praktiskais\\bildes\\Group_photo_of_Wikimania_Bangladesh_2022_(3).jpg")
-plot_faces("praktiskais\\bildes\\Rumba_Kings_Band_Group_Photo_2023.jpg")
-plt.show()
+if __name__ == "__main__":
+    img1_path = r"praktiskais\bildes\Sylvester_Stallone_2015.jpg"
+    # img2_path = r"bildes\7588423560_bf88d0bc79_k.jpg"
+    img2_path = r"praktiskais\bildes\Dwayne_The_Rock_Johnson_2009_portrait.jpg"
+
+    # img1 = cv2.imread(img1_path)
+    # img2 = cv2.imread(img2_path)
+
+    # plt.imshow(img1)
+    # plt.imshow(img2)
+    # plt.show()
+    
+    obj = DeepFace.verify(img1_path, img2_path, model_name = 'ArcFace', detector_backend = 'retinaface')
+    print(obj)
+    # plot_faces("praktiskais\\bildes\\Abstract_Wikipedia_Team_-_Group_photo,_2022-05-12.jpg")
+    # plot_faces("praktiskais\\bildes\\Group_Photo_NWPApril2021.jpg")
+    # plot_faces("praktiskais\\bildes\\Group_photo_of_Wikimania_Bangladesh_2022_(3).jpg")
+    # plot_faces("praktiskais\\bildes\\Rumba_Kings_Band_Group_Photo_2023.jpg")
+    # plt.show()
