@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.bakalaurs.spring.models.Identity;
 import com.bakalaurs.spring.repos.IFaceRepo;
@@ -43,28 +44,6 @@ public class Application {
                 faceService.insertNewFace("./identified_faces\\Jackie_Chan_0001.jpg", null, jc);
                 faceService.insertNewFace("./identified_faces\\Jackie_Chan_0002.jpg", null, jc);
                 faceService.insertNewFace("./identified_faces\\Jackie_Chan_0003.jpg", null, jc);
-
-                // a picture gets uploaded
-                // save it in ./pictures
-                long idp = pictureService.insertNewPicture(picture_path, null);
-                // pass picture_path to detect.py which saves the faces in ./all_faces and
-                // returns list[face_path]
-                ArrayList<Long> facesToIdentitfy = new ArrayList<Long>();
-                for (String face_path : face_paths) {
-                    long idf = faceService.insertNewFace(face_path, pictureService.selectPictureById(idp));
-                    facesToIdentitfy.add(idf);
-                }
-
-                for (long idf : facesToIdentitfy) {
-                    // pass faceService.selectFaceById(idf).getFacePath() to identify.py which
-                    // returns list[face_path]
-                    // handle empty list
-                    // [facePath] ->
-                    // [identities (Idi)] ->
-                    // histogram the occurences ->
-                    // identity with the most occurences ->
-                    // selectFaceById(idf).setIdi(identity);
-                }
             }
         };
 

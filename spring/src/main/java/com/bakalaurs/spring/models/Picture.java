@@ -32,12 +32,22 @@ public class Picture {
     @Setter(value = AccessLevel.NONE)
     private long idp;
 
-    @Column(name = "PicturePath")
+    @Column(name = "Path")
     @NotNull
     @Pattern(regexp = ".+\\.(png|jpeg|jpg)")
-    private String picturePath;
+    private String path;
+
+    @Column(name = "Url")
+    @NotNull
+    private String url;
 
     @OneToMany(mappedBy = "pictureTakenFrom")
     @ToString.Exclude
     private Collection<Face> faces;
+
+    public Picture(@NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String path, @NotNull String url) {
+        this.path = path;
+        this.url = url;
+    }
+
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+
+        <!-- <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script> -->
+    </head>
+
+    <body>
+        <div style="max-width: 600px; margin: 0 auto;">
+            <h2>List of images</h2>
+
+            <div th:if="${images.size() > 0}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>File Path</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="image : ${images}">
+                            <td><img th:src="@{${image.url}}" th:alt="${image.path}" height="60px" />
+                            </td>
+                            <td>[[${image.path}]]</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:unless="${images.size() > 0}">
+                <span>No images found! Upload some by going <a th:href="@{/image/upload}">here</a></span>
+            </div>
+        </div>
+
+    </body>
+
+</html>
