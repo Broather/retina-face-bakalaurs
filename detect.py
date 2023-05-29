@@ -50,9 +50,9 @@ def plot_faces(img_path: str):
 
 
 if __name__ == "__main__":
-    sylvester_img_path = r"praktiskais\bildes\Sylvester_Stallone_2015.jpg"
-    dwayne_img_path = r"praktiskais\bildes\Dwayne_The_Rock_Johnson_2009_portrait.jpg"
-    sylvester2_img_path = r"praktiskais\bildes\7588423560_bf88d0bc79_k.jpg"
+    sylvester_img_path = r"bildes\Sylvester_Stallone_2015.jpg"
+    dwayne_img_path = r"bildes\Dwayne_The_Rock_Johnson_2009_portrait.jpg"
+    sylvester2_img_path = r"bildes\7588423560_bf88d0bc79_k.jpg"
 
     # img1 = cv2.imread(img1_path)
     # img2 = cv2.imread(img2_path)
@@ -67,8 +67,8 @@ if __name__ == "__main__":
     # returns false with a Euclid distance of > threshold (.68)
     different_people = DeepFace.verify(sylvester_img_path, dwayne_img_path, model_name = 'ArcFace', detector_backend = 'retinaface')
     print(f"different_people: {different_people}")
-    # plot_faces("praktiskais\\bildes\\Abstract_Wikipedia_Team_-_Group_photo,_2022-05-12.jpg")
-    # plot_faces("praktiskais\\bildes\\Group_Photo_NWPApril2021.jpg")
-    # plot_faces("praktiskais\\bildes\\Group_photo_of_Wikimania_Bangladesh_2022_(3).jpg")
-    # plot_faces("praktiskais\\bildes\\Rumba_Kings_Band_Group_Photo_2023.jpg")
+    # plot_faces("\bildes\\Abstract_Wikipedia_Team_-_Group_photo,_2022-05-12.jpg")
+    # plot_faces("\bildes\\Group_Photo_NWPApril2021.jpg")
+    # plot_faces("\bildes\\Group_photo_of_Wikimania_Bangladesh_2022_(3).jpg")
+    # plot_faces("\bildes\\Rumba_Kings_Band_Group_Photo_2023.jpg")
     # plt.show()

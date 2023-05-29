@@ -11,6 +11,7 @@ Venv setup [optional]:
     On a penguin:
         python3 -m venv venv
         ./venv/bin/acti{press Tab for autocomplete}
+
 pip install deepface
 pip install matplotlib
 ```
