@@ -1,8 +1,8 @@
-from retinaface import RetinaFace
+
 from deepface import DeepFace
 
 import matplotlib.pyplot as plt
-import cv2
+
 
 def normalise_landmarks(facial_area: dict, landmarks: dict):
     # facial_area -> [top_left_x, top_left_y, bottom_right_x, bottom_right_y]
@@ -48,27 +48,34 @@ def plot_faces(img_path: str):
         # axs[i].set_title(calculate_proportions(normalised_landmarks))
         i = i + 1
 
-
-if __name__ == "__main__":
-    sylvester_img_path = r"bildes\Sylvester_Stallone_2015.jpg"
-    dwayne_img_path = r"bildes\Dwayne_The_Rock_Johnson_2009_portrait.jpg"
-    sylvester2_img_path = r"bildes\7588423560_bf88d0bc79_k.jpg"
-
-    # img1 = cv2.imread(img1_path)
-    # img2 = cv2.imread(img2_path)
-
-    # plt.imshow(img1)
-    # plt.imshow(img2)
-    # plt.show()
-    
-    # returns true with a Euclid distance of < threshold (.68)
-    same_person = DeepFace.verify(sylvester_img_path, sylvester2_img_path, model_name = 'ArcFace', detector_backend = 'retinaface')
-    print(f"same_person: {same_person}")
-    # returns false with a Euclid distance of > threshold (.68)
-    different_people = DeepFace.verify(sylvester_img_path, dwayne_img_path, model_name = 'ArcFace', detector_backend = 'retinaface')
-    print(f"different_people: {different_people}")
     # plot_faces("\bildes\\Abstract_Wikipedia_Team_-_Group_photo,_2022-05-12.jpg")
     # plot_faces("\bildes\\Group_Photo_NWPApril2021.jpg")
     # plot_faces("\bildes\\Group_photo_of_Wikimania_Bangladesh_2022_(3).jpg")
     # plot_faces("\bildes\\Rumba_Kings_Band_Group_Photo_2023.jpg")
     # plt.show()
+
+# pip install retinaface
+from retinaface import RetinaFace
+import cv2
+
+def add_padding(coordinates:list, i:int)->list:
+    # [top_left_x, top_left_y, bottom_right_x, bottom_right_y]
+    coordinates[0] -= i
+    coordinates[1] -= i
+    coordinates[2] += i
+    coordinates[3] += i
+
+    return coordinates
+
+if __name__ == "__main__":
+    group_photo_path = r"./20220801_Group_photo_of_women_at_Chiayi_Station.jpg"
+    group_photo = cv2.imread(group_photo_path)
+    faces = RetinaFace.detect_faces(group_photo_path)
+
+for key in faces.keys():
+    coordinates = faces[key]["facial_area"]
+    coordinates = add_padding(coordinates, 10)
+    # facial_area: [top_left_x, top_left_y, bottom_right_x, bottom_right_y]
+    cropped_image = group_photo[coordinates[1]:coordinates[3], coordinates[0]:coordinates[2]]
+    # saglabāt katru seju atsevišķi kā "./face-1.jpg", "./face-2.jpg" utt.
+    cv2.imwrite(f"./faces/{key}.jpg", cropped_image)
