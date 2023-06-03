@@ -32,6 +32,11 @@ public class Picture {
     @Setter(value = AccessLevel.NONE)
     private long idp;
 
+    @Column(name = "Name")
+    @NotNull
+    @Pattern(regexp = ".+\\.(png|jpeg|jpg)")
+    private String name;
+
     @Column(name = "Path")
     @NotNull
     @Pattern(regexp = ".+\\.(png|jpeg|jpg)")
@@ -45,7 +50,9 @@ public class Picture {
     @ToString.Exclude
     private Collection<Face> faces;
 
-    public Picture(@NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String path, @NotNull String url) {
+    public Picture(@NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String name,
+            @NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String path, @NotNull String url) {
+        this.name = name;
         this.path = path;
         this.url = url;
     }

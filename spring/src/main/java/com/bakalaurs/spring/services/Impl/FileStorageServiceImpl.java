@@ -8,28 +8,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import com.bakalaurs.spring.controllers.ImageController;
 import com.bakalaurs.spring.services.IFileStorageService;
-import com.bakalaurs.spring.services.IPictureService;
 
 @Service
 public class FileStorageServiceImpl implements IFileStorageService {
-    @Autowired
-    IPictureService pictureService;
     private final Path root = Paths.get("./pictures");
 
     @Override
     public void init() {
         try {
             Files.createDirectories(root);
+            // TODO: if already exists, get stream of paths and make picture with only name
+            // and path
+            // TODO: when /images/list is called, only then populate all the image urls from
+            // image.namepackage com.bezkoder.spring.thymeleaf.image.upload.service;
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
@@ -38,21 +36,11 @@ public class FileStorageServiceImpl implements IFileStorageService {
     @Override
     public void save(MultipartFile file) {
         try {
-            Path file_path = this.root.resolve(file.getOriginalFilename());
-            // copy file contents to {root}/{image_name}
-            Files.copy(file.getInputStream(), file_path);
-
-            String path = file_path.toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(ImageController.class, "getImage", file_path.getFileName().toString()).build()
-                    .toString();
-
-            pictureService.insertNewPicture(path, url);
+            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("A file of that name already exists.");
             }
-
             throw new RuntimeException(e.getMessage());
         }
     }

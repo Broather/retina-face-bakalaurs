@@ -18,8 +18,8 @@ public class PictureServiceImpl implements IPictureService {
         return (ArrayList<Picture>) pictureRepo.findAll();
     }
 
-    public Picture insertNewPicture(String path, String url){
-        Picture picture = new Picture(path, url);
+    public Picture insertNewPicture(String name, String path, String url) {
+        Picture picture = new Picture(name, path, url);
         pictureRepo.save(picture);
         return picture;
     }

@@ -25,23 +25,32 @@ import com.bakalaurs.spring.services.IFileStorageService;
 import com.bakalaurs.spring.services.IPictureService;
 
 @Controller
-@RequestMapping("/image")
+@RequestMapping("/images")
 public class ImageController {
 
     @Autowired
     IFileStorageService storageService;
     @Autowired
-    IPictureService pictureService;
+    IPictureRepo pictureRepo;
 
-    @GetMapping("list")
+    @GetMapping("/list")
     public String getListpictures(Model model) {
-        model.addAttribute("images", pictureService.selectAllPictures());
-        return "image-list";
+        List<Picture> pictures = storageService.loadAll().map(path -> {
+            String name = path.getFileName().toString();
+            String file_path = path.toString();
+            String url = MvcUriComponentsBuilder
+                    .fromMethodName(ImageController.class, "getImage", path.getFileName().toString()).build()
+                    .toString();
+
+            return pictureRepo.save(new Picture(name, file_path, url));
+        }).collect(Collectors.toList());
+        model.addAttribute("images", pictures);
+        return "image-list.html";
     }
 
     @GetMapping("/upload")
     public String getUploadImage(Model model) {
-        return "image-upload";
+        return "image-upload.html";
     }
 
     @PostMapping("/upload")
@@ -53,30 +62,10 @@ public class ImageController {
             message = "Uploaded the image successfully: " + file.getOriginalFilename();
             model.addAttribute("message", message);
             // TODO: implement
-            // // save it in ./pictures
-            // long idp = pictureService.insertNewPicture(picture_path, null);
-            // // pass picture_path to detect.py which saves the faces in ./all_faces and
-            // // returns list[face_path]
-            // ArrayList<Long> facesToIdentitfy = new ArrayList<Long>();
-            // for (String face_path : face_paths) {
-            // long idf = faceService.insertNewFace(face_path,
-            // pictureService.selectPictureById(idp));
-            // facesToIdentitfy.add(idf);
-            // }
 
-            // for (long idf : facesToIdentitfy) {
-            // // pass faceService.selectFaceById(idf).getFacePath() to identify.py which
-            // // returns list[face_path]
-            // // handle empty list
-            // // [facePath] ->
-            // // [identities (Idi)] ->
-            // // histogram the occurences ->
-            // // identity with the most occurences ->
-            // // selectFaceById(idf).setIdi(identity);
-            // }
         } catch (Exception e) {
             model.addAttribute("message",
-                    "Could not upload the image: " + file.getOriginalFilename() + ". Error: " + e.getMessage());
+                    "Could not upload the image: " + file.getOriginalFilename() + ". Error: " + e.toString());
         }
         return "image-upload";
     }
