@@ -33,3 +33,6 @@ build/
 .venv/
 TODO.md
 spring/HELP.md
+
+### Java ###
+*.class
