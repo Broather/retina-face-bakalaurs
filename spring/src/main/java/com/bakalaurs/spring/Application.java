@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.bakalaurs.spring.models.Identity;
 import com.bakalaurs.spring.repos.IFaceRepo;
 import com.bakalaurs.spring.repos.IIdentityRepo;
-import com.bakalaurs.spring.repos.IPictureRepo;
+import com.bakalaurs.spring.repos.IImageRepo;
 import com.bakalaurs.spring.services.IFaceService;
 
 @SpringBootApplication
@@ -23,7 +23,7 @@ public class Application {
 
     @Bean
     public CommandLineRunner testModel(IFaceService faceService,
-            IPictureRepo pictureRepo,
+            IImageRepo pictureRepo,
             IIdentityRepo identityRepo) {
 
         return new CommandLineRunner() {

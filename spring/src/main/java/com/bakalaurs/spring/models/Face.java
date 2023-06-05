@@ -40,13 +40,13 @@ public class Face {
 
     @ManyToOne
     @JoinColumn(name = "Idp")
-    private Picture pictureTakenFrom;
+    private Image pictureTakenFrom;
 
     @ManyToOne
     @JoinColumn(name = "Idi")
     private Identity identity;
 
-    public Face(@NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String facePath, Picture pictureTakenFrom,
+    public Face(@NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String facePath, Image pictureTakenFrom,
             Identity identity) {
         this.facePath = facePath;
         this.pictureTakenFrom = pictureTakenFrom;
