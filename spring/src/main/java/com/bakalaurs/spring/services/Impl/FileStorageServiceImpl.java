@@ -18,16 +18,12 @@ import com.bakalaurs.spring.services.IFileStorageService;
 
 @Service
 public class FileStorageServiceImpl implements IFileStorageService {
-    private final Path root = Paths.get("./pictures");
+    private final Path root = Paths.get("./images");
 
     @Override
     public void init() {
         try {
             Files.createDirectories(root);
-            // TODO: if already exists, get stream of paths and make picture with only name
-            // and path
-            // TODO: when /images/list is called, only then populate all the image urls from
-            // image.namepackage com.bezkoder.spring.thymeleaf.image.upload.service;
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }

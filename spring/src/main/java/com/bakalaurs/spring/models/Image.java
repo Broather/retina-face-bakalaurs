@@ -25,7 +25,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Picture {
+public class Image {
     @Column(name = "Idp")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,11 +37,6 @@ public class Picture {
     @Pattern(regexp = ".+\\.(png|jpeg|jpg)")
     private String name;
 
-    @Column(name = "Path")
-    @NotNull
-    @Pattern(regexp = ".+\\.(png|jpeg|jpg)")
-    private String path;
-
     @Column(name = "Url")
     @NotNull
     private String url;
@@ -50,10 +45,8 @@ public class Picture {
     @ToString.Exclude
     private Collection<Face> faces;
 
-    public Picture(@NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String name,
-            @NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String path, @NotNull String url) {
+    public Image(@NotNull @Pattern(regexp = ".+\\.(png|jpeg|jpg)") String name, @NotNull String url) {
         this.name = name;
-        this.path = path;
         this.url = url;
     }
 
