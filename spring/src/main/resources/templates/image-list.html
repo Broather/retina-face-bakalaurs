@@ -24,10 +24,10 @@
                     </thead>
                     <tbody>
                         <tr th:each="image : ${images}">
-                            <td><img th:src="@{${image.url}}" th:alt="${image.path}" height="60px" />
+                            <td><img th:src="@{${image.url}}" th:alt="${image.name}" height="60px" />
                             </td>
-                            <td>[[${image.path}]]</td>
-                            <td></td>
+                            <td th:text="${image.name}"></td>
+                            <td><a th:href="@{search/__${image.name}__}">Search</a></td>
                         </tr>
                     </tbody>
                 </table>
