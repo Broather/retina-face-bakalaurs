@@ -1,6 +1,6 @@
 .venv/
 TODO.md
-HELP.md
+spring/HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
