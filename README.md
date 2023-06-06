@@ -11,11 +11,13 @@ Venv setup [optional]:
     On Windows:
         python -m venv venv
         venv/Scripts/activate{press Tab for autocomplete}
-        python -m pip install -r requirements.txt
-        python search.py Jackie_Chan_0001.jpg
     On a penguin:
         python3 -m venv venv
         venv/bin/activate{press Tab for autocomplete}
-        python3 -m pip install -r requirements.txt
-        python3 search.py Jackie_Chan_0001.jpg
+On Windows:
+    python -m pip install -r requirements.txt
+    python search.py Jackie_Chan_0001.jpg
+On a penguin:
+    python3 -m pip install -r requirements.txt
+    python3 search.py Jackie_Chan_0001.jpg
 ```
