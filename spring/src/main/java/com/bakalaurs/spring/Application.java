@@ -1,15 +1,10 @@
 package com.bakalaurs.spring;
 
-import java.util.ArrayList;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.GetMapping;
-
 import com.bakalaurs.spring.models.Identity;
-import com.bakalaurs.spring.repos.IFaceRepo;
 import com.bakalaurs.spring.repos.IIdentityRepo;
 import com.bakalaurs.spring.repos.IImageRepo;
 import com.bakalaurs.spring.services.IFaceService;

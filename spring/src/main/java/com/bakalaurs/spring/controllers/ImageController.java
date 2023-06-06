@@ -1,7 +1,6 @@
 package com.bakalaurs.spring.controllers;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.bakalaurs.spring.models.Image;
 import com.bakalaurs.spring.repos.IImageRepo;
 import com.bakalaurs.spring.services.IFileStorageService;
+import com.bakalaurs.spring.services.IImageService;
 
 @Controller
 @RequestMapping("/images")
@@ -31,18 +31,25 @@ public class ImageController {
     @Autowired
     IFileStorageService storageService;
     @Autowired
-    IImageRepo pictureRepo;
+    IImageRepo imageRepo;
+    @Autowired
+    IImageService imageService;
 
     @GetMapping("/list")
     public String getListpictures(Model model) {
+        // TODO: initialize imageRepo in storageService.init() and call
+        // imageRepo.findAll() (beans)
         List<Image> images = storageService.loadAll().map(path -> {
-            String file_path = path.toString();
+            String name = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
                     .fromMethodName(ImageController.class, "getImage", path.getFileName().toString())
                     .build()
                     .toString();
-
-            return pictureRepo.save(new Image(file_path, url));
+            if (!imageRepo.existsImageByName(name)) {
+                return imageRepo.save(new Image(name, url));
+            } else {
+                return new Image(name, url);
+            }
         }).collect(Collectors.toList());
         model.addAttribute("images", images);
         return "image-list.html";
@@ -66,16 +73,36 @@ public class ImageController {
     }
 
     @GetMapping("/search/{filename:.+}")
-    public String searchImage(Model model, @PathVariable String filename) {
-        System.out.println(filename);
-        ProcessBuilder processBuilder = new ProcessBuilder("python", Path.of("search.py").toString(), filename);
+    public String searchImage(Model model, @PathVariable(name = "filename") String image_name_to_search_by)
+            throws Exception {
+        Image image_to_search_by = imageService.selectImageByName(image_name_to_search_by);
+
+        // search.py takes image_name and gets all images from /images where .verify ==
+        // true
+        ProcessBuilder processBuilder = new ProcessBuilder("python", "search.py", image_to_search_by.getName());
         processBuilder.redirectErrorStream(true);
         processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        try {
-            processBuilder.start();
-        } catch (IOException e) {
+
+        Process process = processBuilder.start();
+        int exit_code = process.waitFor();
+
+        // TODO: call .detect_faces in java just to check more than one face here before
+        // calling search.py
+        if (exit_code == 69) {
+            System.out.println();
+            model.addAttribute("message", "more than one faces in image: " + image_to_search_by.getName());
+            return "message-page.html";
         }
-        return "debug-page.html";
+        // read the temp-image-names.txt for the names found by search.py
+        List<Image> images = Files.lines(Path.of("temp-image-names.txt")).map(image_name -> {
+            return imageService.selectImageByName(image_name);
+        }).collect(Collectors.toList());
+
+        model.addAttribute("image_searched_by", image_to_search_by);
+        model.addAttribute("images", images);
+
+        return "image-list.html";
+
     }
 
     @GetMapping("/{filename:.+}")
@@ -83,28 +110,8 @@ public class ImageController {
         Resource file = storageService.load(filename);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +
-                        file.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
     }
-
-    // @GetMapping("/delete/{filename:.+}")
-    // public String deleteImage(@PathVariable String filename, Model model,
-    // RedirectAttributes redirectAttributes) {
-    // try {
-    // boolean existed = storageService.delete(filename);
-
-    // if (existed) {
-    // redirectAttributes.addFlashAttribute("message", "Delete the image
-    // successfully: " + filename);
-    // } else {
-    // redirectAttributes.addFlashAttribute("message", "The image does not exist!");
-    // }
-    // } catch (Exception e) {
-    // redirectAttributes.addFlashAttribute("message",
-    // "Could not delete the image: " + filename + ". Error: " + e.getMessage());
-    // }
-
-    // return "redirect:/pictures";
-    // }
 }

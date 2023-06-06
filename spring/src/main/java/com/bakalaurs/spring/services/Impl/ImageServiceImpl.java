@@ -12,15 +12,19 @@ import com.bakalaurs.spring.services.IImageService;
 @Service
 public class ImageServiceImpl implements IImageService {
     @Autowired
-    IImageRepo pictureRepo;
+    IImageRepo imageRepo;
 
     public ArrayList<Image> selectAllImages() {
-        return (ArrayList<Image>) pictureRepo.findAll();
+        return (ArrayList<Image>) imageRepo.findAll();
     }
 
-    public Image insertNewImage(String path, String url) {
-        Image picture = new Image(path, url);
-        pictureRepo.save(picture);
+    public Image insertNewImage(String name, String url) {
+        Image picture = new Image(name, url);
+        imageRepo.save(picture);
         return picture;
+    }
+
+    public Image selectImageByName(String name) {
+        return imageRepo.findImageByName(name);
     }
 }

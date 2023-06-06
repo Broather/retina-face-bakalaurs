@@ -1,6 +1,5 @@
 package com.bakalaurs.spring.models;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import jakarta.persistence.Column;

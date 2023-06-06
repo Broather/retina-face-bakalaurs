@@ -8,4 +8,6 @@ public interface IImageService {
     ArrayList<Image> selectAllImages();
 
     Image insertNewImage(String path, String url);
+
+    Image selectImageByName(String name);
 }
