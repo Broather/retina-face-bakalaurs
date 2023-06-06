@@ -37,46 +37,37 @@ import sys
 import os
 
 if __name__ == "__main__":
-    ALL_IMAGES_ROOT = "images/"
+    IMAGES_ROOT = "images/"
     TEMP_FACES_ROOT = "temp-faces/"
 
     print('Number of arguments:', len(sys.argv), 'arguments.')
     print('Argument List:', str(sys.argv))
     
     image_name_to_search_by = sys.argv[1]
-    image_path_to_search_by = f"{ALL_IMAGES_ROOT}{image_name_to_search_by}"
-    faces = RetinaFace.detect_faces(image_path_to_search_by)
+    faces = RetinaFace.detect_faces(f"{IMAGES_ROOT}{image_name_to_search_by}")
     print(f"Number of faces in {image_name_to_search_by}: {len(faces)}")
-    if (len(faces) == 0):
-        # TODO: handle empty list
-        pass
-    elif (len(faces) > 1):
-        # TODO: delete any images in temp-faces
-        for key in faces.keys():
-            coordinates = faces[key]["facial_area"]
-            imread()
-            # TODO: padding proportional to image resolution. 10% ?
-            # TODO: transform coordinates from [x,y, x,y] to [x,y ,width, height] and have padding proportional to width
-            coordinates = add_padding(coordinates, 10)
-            # facial_area -> [top_left_x, top_left_y, bottom_right_x, bottom_right_y]
-            cropped_image = imread(image_path_to_search_by)[coordinates[1]: coordinates[3], coordinates[0]: coordinates[2],:]
-            imsave(f"./temp-faces/{key}.jpg", cropped_image)
+    if (len(faces) > 1):
+        sys.exit(69)
 
-        print("\n".join(os.listdir("./temp-faces")))
+    matching_image_names = []
+    image_names_to_search_through = [file_name for file_name in os.listdir(IMAGES_ROOT)]
 
-    matching_image_paths = []
-    image_paths_to_search_through = [f"{ALL_IMAGES_ROOT}{file_name}" for file_name in os.listdir(ALL_IMAGES_ROOT)]
-
-    print(f"Need to search through {len(image_paths_to_search_through)} images")
+    print(f"Need to search through {len(image_names_to_search_through)} images")
     progress_counter = 0
-    for image_path_to_compare in image_paths_to_search_through:
-        verification_result = DeepFace.verify(image_path_to_search_by, image_path_to_compare, model_name = 'ArcFace',
+    for image_name_to_compare in image_names_to_search_through:
+        verification_result = DeepFace.verify(f"{IMAGES_ROOT}{image_name_to_search_by}", f"{IMAGES_ROOT}{image_name_to_compare}", model_name = 'ArcFace',
                          detector_backend = 'retinaface',
-                         enforce_detection=False)
+                         enforce_detection = False)
         if (verification_result["verified"]):
-            matching_image_paths.append(image_path_to_compare)
+            matching_image_names.append(image_name_to_compare)
         progress_counter += 1
-        print(f"{progress_counter}/{len(image_paths_to_search_through)}, {image_path_to_compare}: {verification_result['verified']}")
+        print(f"{progress_counter}/{len(image_names_to_search_through)}, {image_name_to_compare}: {verification_result['verified']}")
 
-    result = "\n".join(matching_image_paths)
+    result = "\n".join(matching_image_names)
     print(result)
+
+    with open('temp-image-names.txt', 'w') as file:
+        for image_name in matching_image_names:
+            file.write(image_name + '\n')
+    
+    sys.exit(0)
