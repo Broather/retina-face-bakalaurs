@@ -21,3 +21,6 @@ On a penguin:
     python3 -m pip install -r requirements.txt
     python3 search.py Jackie_Chan_0001.jpg
 ```
+
+### Results of searching Keanu_Reeves_0002.jpg
+![Keanu search](Keanu_Reeves_0002_search.png)
