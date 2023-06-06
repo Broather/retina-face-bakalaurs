@@ -10,32 +10,35 @@
     </head>
 
     <body>
-        <div style="max-width: 600px; margin: 0 auto;">
-            <h2>List of images</h2>
 
-            <div th:if="${images.size() > 0}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>File Path</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="image : ${images}">
-                            <td><img th:src="@{${image.url}}" th:alt="${image.name}" height="60px" />
-                            </td>
-                            <td th:text="${image.name}"></td>
-                            <td><a th:href="@{search/__${image.name}__}">Search</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div th:if="${image_searched_by}">
+            <h2>Image searched by</h2>
+            <img th:src="@{${image_searched_by.url}}" th:alt="${image_searched_by.name}" height="60px" />
+        </div>
+        <h2>List of images</h2>
 
-            <div th:unless="${images.size() > 0}">
-                <span>No images found! Upload some by going <a th:href="@{/images/upload}">here</a></span>
-            </div>
+        <div th:if="${images.size() > 0}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>File Path</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="image : ${images}">
+                        <td><img th:src="@{${image.url}}" th:alt="${image.name}" height="60px" />
+                        </td>
+                        <td th:text="${image.name}"></td>
+                        <td><a th:href="@{/images/search/__${image.name}__}">Search</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:unless="${images.size() > 0}">
+            <span>No images found! Upload some by going <a th:href="@{/images/upload}">here</a></span>
         </div>
 
     </body>
